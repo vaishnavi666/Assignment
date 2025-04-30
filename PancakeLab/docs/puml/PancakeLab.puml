@@ -1,0 +1,84 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface IOrderService {
+  +Order createOrder(int building, int roomNumber)
+  +boolean cancelOrder(UUID orderId)
+  +boolean prepareOrder(UUID orderId)
+  +Order deliverOrder(UUID orderId)
+  +Set<UUID> listCompletedOrders()
+  +Set<UUID> listPreparedOrders()
+}
+
+interface IPancakeService {
+  +Map<Pancake, Integer> addPancakes(UUID orderId, Pancake pancake, int count)
+  +Map<Pancake, Integer> removePancakes(UUID orderId, Pancake pancake, int count)
+}
+
+class Order {
+  -UUID id
+  -Address address
+  -List<Pancake> pancakes
+  +void addPancake(Pancake pancake)
+  +List<Pancake> getPancakes()
+  +UUID getId()
+}
+
+class NullOrder {
+  +List<Pancake> getPancakes()
+}
+
+class OrderBuilder {
+  -Address address
+  +OrderBuilder(Address address)
+  +Order build()
+}
+
+class Pancake {
+  -List<String> ingredients
+  +List<String> getIngredients()
+}
+
+class NullPancake {
+  +List<String> getIngredients()
+}
+
+class PancakeBuilder {
+  -List<String> ingredients
+  +PancakeBuilder(List<String> ingredients)
+  +Pancake build()
+  +static Set<String> getAllowedIngredients()
+}
+
+class Address {
+  -int building
+  -int room
+  +int getBuilding()
+  +int getRoom()
+}
+
+class OrderServiceImpl {
+  +Order createOrder(int building, int roomNumber)
+  +boolean cancelOrder(UUID orderId)
+  +boolean prepareOrder(UUID orderId)
+  +Order deliverOrder(UUID orderId)
+  +Set<UUID> listCompletedOrders()
+  +Set<UUID> listPreparedOrders()
+  +Map<Pancake, Integer> addPancakes(UUID orderId, Pancake pancake, int count)
+  +Map<Pancake, Integer> removePancakes(UUID orderId, Pancake pancake, int count)
+  +Set<Order> listPreOrders()
+  +Order findOrderById(UUID orderId)
+}
+
+IOrderService <|.. OrderServiceImpl
+IPancakeService <|.. OrderServiceImpl
+Order <|-- NullOrder
+Pancake <|-- NullPancake
+OrderBuilder --> Order
+PancakeBuilder --> Pancake
+Order --> Address
+Order --> Pancake
+OrderServiceImpl --> OrderBuilder
+OrderServiceImpl --> PancakeBuilder
+
+@enduml

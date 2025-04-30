@@ -1,0 +1,5 @@
+org\pancakelab\model\pancake\PancakeTest.class
+org\pancakelab\builder\PancakeBuilderTest.class
+org\pancakelab\builder\OrderBuilderTest.class
+org\pancakelab\service\PancakeServiceTest.class
+org\pancakelab\model\order\OrderTest.class
