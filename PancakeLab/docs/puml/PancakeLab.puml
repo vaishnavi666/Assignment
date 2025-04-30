@@ -15,17 +15,38 @@ interface IPancakeService {
   +Map<Pancake, Integer> removePancakes(UUID orderId, Pancake pancake, int count)
 }
 
+class Address {
+  -int building
+  -int room
+}
+
 class Order {
   -UUID id
   -Address address
-  -List<Pancake> pancakes
-  +void addPancake(Pancake pancake)
-  +List<Pancake> getPancakes()
+  -Map<Pancake, Integer> pancakes
+  +Order(Address address)
   +UUID getId()
+  +Address getAddress()
+  +Map<Pancake, Integer> getPancakes()
+  +Map<Pancake, Integer> addPancakes(Pancake pancake, int count)
+  +Map<Pancake, Integer> removePancakes(Pancake pancake, int count)
 }
 
 class NullOrder {
-  +List<Pancake> getPancakes()
+  +NullOrder()
+}
+
+class Pancake {
+  -List<String> ingredients
+  +Pancake(List<String> ingredients)
+  +List<String> getIngredients()
+  +String getDescription()
+  +String getName(List<String> ingredients)
+  -String capitalize(String word)
+}
+
+class NullPancake {
+  +NullPancake()
 }
 
 class OrderBuilder {
@@ -34,27 +55,11 @@ class OrderBuilder {
   +Order build()
 }
 
-class Pancake {
-  -List<String> ingredients
-  +List<String> getIngredients()
-}
-
-class NullPancake {
-  +List<String> getIngredients()
-}
-
 class PancakeBuilder {
   -List<String> ingredients
   +PancakeBuilder(List<String> ingredients)
   +Pancake build()
   +static Set<String> getAllowedIngredients()
-}
-
-class Address {
-  -int building
-  -int room
-  +int getBuilding()
-  +int getRoom()
 }
 
 class OrderServiceImpl {
@@ -72,12 +77,16 @@ class OrderServiceImpl {
 
 IOrderService <|.. OrderServiceImpl
 IPancakeService <|.. OrderServiceImpl
-Order <|-- NullOrder
-Pancake <|-- NullPancake
+
+NullOrder --|> Order
+NullPancake --|> Pancake
+
 OrderBuilder --> Order
 PancakeBuilder --> Pancake
+
 Order --> Address
 Order --> Pancake
+
 OrderServiceImpl --> OrderBuilder
 OrderServiceImpl --> PancakeBuilder
 
